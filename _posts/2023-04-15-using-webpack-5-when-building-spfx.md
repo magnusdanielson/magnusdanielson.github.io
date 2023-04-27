@@ -105,4 +105,18 @@ There are som options to use
 --watch turns on watch mode, so any changes will rebuild. Note that it is fast as lightning thanks to Webpack 5.
 --production changes how the build is performed, use this if you want to bundle the webpart for release.
 
-The copy task replaces the files created by the regular spfx bundle command. That means that you can never run the webpack 4 build at the same time as the webpak 5 build. Also note that the "src" folder should not be updated, just code in the "srcau"-folder.
+The copy task replaces the files created by the regular spfx bundle command. That means that you can never run the webpack 4 build at the same time as the webpack 5 build. Also note that the "src" folder should not be updated, just code in the "srcau"-folder.
+
+### Package for release
+
+First make sure you can run the webpart in the workbench. Begin by running the command:
+
+```c
+gulp bundlewp5
+```
+
+Next run the regular gulp task to package the solution. It will use the bundle files created.
+
+```c
+gulp package-solution --ship
+```
