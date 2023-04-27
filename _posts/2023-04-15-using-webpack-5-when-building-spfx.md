@@ -5,13 +5,11 @@ author: magnus
 categories: [ spfx, sharepoint, webpack ]
 image: assets/images/16.jpg
 ---
-Currently SPFx is using Webpack 4 and that is causing some trouble for me when I depend on Webpack 5. The added benefit of this change is that your code builds lightning fast compared to the regular build system.
-
-There are a few things we need to fix in the solution to make this work. You can adapt the fixes to your liking. I wanted to have all code in the same project and any assumptions are built upon that.
+SPFx currently uses Webpack 4, which can be problematic when relying on Webpack 5. However, switching to Webpack 5 speeds up your code builds significantly. To make this transition, some fixes must be made to the solution. These fixes can be adapted to your preference, but it's recommended to keep all code in the same project.
 
 ## Start with a regular project
 
-First we create a new SPFx-project with yeoman.
+Begin by creating a new SPFx project with yeoman. Use the following command.
 
 ```c
 yo @microsoft/sharepoint --framework minimal --component-type webpart --solution-name app --component-name HelloWorld
@@ -19,13 +17,13 @@ yo @microsoft/sharepoint --framework minimal --component-type webpart --solution
 
 ## Add configuration with aurelia-spfx yeoman generator
 
-Then we modify the project with help of another Yeoman generator. First install it if you have not already.
+Next, modify the project with the Aurelia-SPFx yeoman generator. Install the generator using the following command if you haven't already.
 
 ```c
 npm install aurelia-spfx -g
 ```
 
-Then we run the generator in the same folder as the regular SharePoint generator was run. Answer yes to all questions.
+Run the generator in the same folder where the regular SharePoint generator was run. Answer "yes" to all questions.
 
 ```c
 yo aurelia-spfx
@@ -33,13 +31,13 @@ yo aurelia-spfx
 
 ## Try it out
 
-Now let's try this out. Detailed description of the complete setup follows after this. Open a terminal in the root of the project and start it is you always do.
+To test the setup, open a terminal in the root of the project and run:
 
 ```c
 gulp serve
 ```
 
-Open the workbench and add the webpart just to verify that the regular build is still working. Then open another terminal and execute below command.
+Add the web part in the workbench to verify that the regular build still works. Then open another terminal and run:
 
 ```c
 gulp buildwp5 --watch
@@ -51,7 +49,7 @@ Now refresh the browser and you should see your webpart built with Webpack 5. Fr
 
 ### Background
 
-To make this work we keep the regular build in the src folder. The reason for this is that there are some Webpack plugins that creates the basic files to actually run the webpart, the manifest file is one example. I have tried to adjust the plugins to work with Webpack 5 but that is quite hard with out the source code and I think there is a limit on how much one can tinker with the files in the node_modules folder before it gets to crazy. There are dependencies that forces us to use Webpack 4 at this moment. I have asked Microsoft if they can provide more information on the plugins so that I can reuse them in this setup but I think we just have to wait for them to upgrade the plugins. One option is to recreate the plugins from scratch but I think there is too much work and hopefully Webpack 5 support from Microsoft will come in a not too distant future.
+To make this work we keep the regular build in the src folder. The reason for this is that there are some Webpack plugins that creates the basic files to actually run the webpart, such as the manifest file. There are dependencies that forces us to use Webpack 4 at this moment. I have asked Microsoft if they can provide more information on the plugins so that I can reuse them in this setup but I think we just have to wait for them to upgrade the plugins. One option is to recreate the plugins from scratch, but that is too much work. Hopefully, Microsoft will upgrade the plugins to support Webpack 5 in the near future.
 
 ### Modifications to the project
 
