@@ -4,6 +4,8 @@ title:  "Using Webpack 5 when building spfx"
 author: magnus
 categories: [ spfx, sharepoint, webpack ]
 image: assets/images/16.jpg
+featured: true
+hidden: true
 ---
 SPFx currently uses Webpack 4, which can be problematic when relying on Webpack 5. However, switching to Webpack 5 speeds up your code builds significantly. To make this transition, some fixes must be made to the solution. These fixes can be adapted to your preference, but it's recommended to keep all code in the same project.
 

@@ -2,7 +2,7 @@
 layout: post
 title:  "Keeping odata.nextLink property in a c# class"
 author: magnus
-categories: [ REST, API, SharePoint, JSON ]
+categories: [ rest, api, sharepoint, json ]
 image: assets/images/17.jpg
 ---
 
