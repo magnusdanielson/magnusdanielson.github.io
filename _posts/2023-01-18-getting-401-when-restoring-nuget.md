@@ -20,8 +20,6 @@ From the sidebar menu, select "Security".
 
 Under "Personal access tokens", click "New Token" to create a new PAT.
 
-![New Token]({{ site.baseurl }}/assets/images/select-personal-access-tokens.jpg)
-
 Choose a name for your token and select the organization you want it to apply to.
 
 Select the desired scopes for your token. These scopes determine what actions your token can perform.
