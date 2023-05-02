@@ -7,7 +7,7 @@ image: assets/images/15.jpg
 ---
 We have had a custom NuGet-feed in AzureDevops for a long time. Everytime we switch to a newer developer machine we need to restore access to the custom feed. The error we see is a plain Unauthorized.
 
-```c
+```batch
 error :   Response status code does not indicate success: 401 (Unauthorized).
 ```
 
@@ -19,7 +19,8 @@ Log in to your Azure DevOps account and navigate to your profile settings.
 From the sidebar menu, select "Security".
 
 Under "Personal access tokens", click "New Token" to create a new PAT.
-
+<p class="mb-5"><img class="shadow-lg" src="{{site.baseurl}}/assets/images/select-personal-access-tokens.jpg" 
+alt="Select token" /></p>
 Choose a name for your token and select the organization you want it to apply to.
 
 Select the desired scopes for your token. These scopes determine what actions your token can perform.
