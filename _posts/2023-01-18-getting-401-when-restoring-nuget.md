@@ -2,7 +2,7 @@
 layout: post
 title:  "Getting 401 when restoring from custom NuGet-feed"
 author: magnus
-categories: [ Nuget, 401 ]
+categories: [ Nuget ]
 image: assets/images/15.jpg
 ---
 We have had a custom NuGet-feed in AzureDevops for a long time. Everytime we switch to a newer developer machine we need to restore access to the custom feed. The error we see is a plain Unauthorized.
