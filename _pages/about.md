@@ -12,7 +12,7 @@ comments: false
 This collection of posts are mostly written as a public documentation of those findings. I expect that I 
 will read these notes in the future. If anyonelse does, that is great. </p>
 
-<p class="mb-5"><img class="shadow-lg" src="{{site.baseurl}}/assets/images/mediumish-jekyll-template.png" alt="jekyll template mediumish" /></p>
+<p class="mb-5"><img class="shadow-lg" src="{{site.baseurl}}/assets/images/building-blocks-hero-p-1080-960x686.jpeg" alt="Look book" /></p>
 
 <div class="col-md-4">
 
