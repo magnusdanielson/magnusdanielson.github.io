@@ -53,6 +53,7 @@ Also open the manifest for the Teams app. Verify that `id` and `webApplicationIn
       ]
     }
   }
+```
 
 Step 3: Request consent from users
 
