@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Tree of Codes"
+title:  "Resource-specific for you Teams app"
 author: magnus
-categories: [ Jekyll, tutorial ]
+categories: [ Teams, app ]
 image: assets/images/9.jpg
 ---
 As a Teams app developer, you may need to access various resources within a user's Teams environment, such as messages, files, or channels. However, you need to ensure that users are comfortable granting access to these resources and that their data is secure. That's where resource-specific consent comes in.
