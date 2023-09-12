@@ -13,6 +13,31 @@ SharePoint community is betting on .Net core and SharePoint online. That leaves 
 
 Step 1. Register the SPTrustedSecurityTokenIssuer if you have not done that already.
 
+```powershell
+New-SelfSignedCertificate -CertStoreLocation cert:\localmachine\my -dnsname sp19b.dunite.local -FriendlyName "sp19Rsa256"
+```
+
+Then use the Certificate Managment tool to export the pfx and the cer files to the folder c:\certs
+Finally register the SPTrustedSecurityTokenIssuer. Remeber to verify that the certificate uses Rsa256 algorithm
+
+```powershell
+$publicCertPath = "C:\certs\sp19brsa256.cer"
+$certificate = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($publicCertPath)
+New-SPTrustedRootAuthority -Name "SP19HighTrustRSA256" -Certificate $certificate
+$realm = Get-SPAuthenticationRealm
+$specificIssuerId = "a24341ca-8754-4781-8d90-3850263a50f0"
+$fullIssuerIdentifier = $specificIssuerId + '@' + $realm
+New-SPTrustedSecurityTokenIssuer -Name "High Trust SP19 RSA256" -Certificate $certificate -RegisteredIssuerName $fullIssuerIdentifier –IsTrustBroker
+iisreset
+```
+I usually always setup the SharePoint machine to run SSL, but in this case it was not done yet, therefor we need:
+
+```powershell
+$serviceConfig = Get-SPSecurityTokenServiceConfig
+$serviceConfig.AllowOAuthOverHttp = $true
+$serviceConfig.Update()
+```
+
 You need to collect the following information, all values will differ on your farm.
 
 ```csharp
@@ -53,7 +78,7 @@ using (FileStream ksfis = System.IO.File.OpenRead(CertificatPath))
 }
 ```
 
-Step 3. Create the app token
+Step 3. Create the app token 
 
 ```cs
 long validFrom = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -61,6 +86,7 @@ long validTo = DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds();
 string issuer = $"{this.IssuerId}@{this.Realm}";
 string nameid = $"{this.ClientId}@{this.Realm}";
 string audience = $"{this.SharePointPrincipal}/{targetApplicationHostName}@{this.Realm}";
+// CreateActorTokenJWT
 var mytoken = JwtBuilder.Create()
           .WithAlgorithm(new RS256Algorithm(this.x5tCertificate))
           .AddClaim("nbf", validFrom)
@@ -86,6 +112,35 @@ client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("app
 HttpResponseMessage response = await client.GetAsync(targetApplicationUri.Append(relativePath));
 ```
 
+Step 5. Just incase you also need a user token
+
+```cs
+long nowMillis = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+long expMillis = DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds();
+string issuer = $"{this.IssuerId}@{this.Realm}";
+string nameid = $"{this.ClientId}@{this.Realm}";
+string audience = $"{this.SharePointPrincipal}/{targetApplicationHostName}@{this.Realm}";
+string actorTokenString = this.CreateActorTokenJWT(issuer, audience, nameid, nowMillis, expMillis);
+PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
+UserPrincipal user = UserPrincipal.FindByIdentity(ctx, accountName);
+if (user != null)
+{
+    var mytoken = JwtBuilder.Create()
+                     .WithAlgorithm(new NoneAlgorithm())
+                      .AddClaim("nbf", nbf)
+                      .AddClaim("exp", exp)
+                      .AddClaim("aud", audience)
+                      .AddClaim("iss", issuer)
+                      .AddClaim("nameid", user.Sid.Value.ToLower())
+                      .AddClaim("nii", "urn:office:idp:activedirectory")
+                      .AddClaim("actortoken", actorToken)
+                      .AddHeader("typ", "JWT")
+                      .Encode();
+
+    return mytoken;
+}
+throw new Exception("User not found");
+```
 ## Summary
 The same pattern can be applied with small modifications to get a user token too. We with tool
 we can now easily call the REST Api in SharePoint onprem from .net core.
